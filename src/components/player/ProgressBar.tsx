@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatDuration } from '../../lib/utils';
-import { Slider } from "../../components/ui/slider"
+import { Slider } from "../ui/slider"
 
 interface ProgressBarProps {
   currentTime: number;
@@ -16,7 +16,7 @@ export function ProgressBar({ currentTime, duration, onSeek }: ProgressBarProps)
   };
 
   return (
-    <div className="w-full space-y-2">
+    <div className="w-full space-y-1">
       <Slider
         value={[progress]}
         max={100}

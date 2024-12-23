@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, Library, Heart, Menu, X } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Home, Search, Library, Heart, Menu, X } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 import { cn } from "../lib/utils";
-import { Button } from "../components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
+import { Button } from "./ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 export default function Sidebar() {
   const location = useLocation();
@@ -12,9 +12,9 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navigation = [
-    { name: 'Home', href: '/', icon: Home },
-    { name: 'Search', href: '/search', icon: Search },
-    ...(user ? [{ name: 'Liked Songs', href: '/liked', icon: Heart }] : []),
+    { name: "Home", href: "/", icon: Home },
+    { name: "Search", href: "/search", icon: Search },
+    ...(user ? [{ name: "Liked Songs", href: "/liked", icon: Heart }] : []),
   ];
 
   const NavContent = () => (
@@ -26,10 +26,10 @@ export default function Sidebar() {
             key={item.name}
             to={item.href}
             className={cn(
-              'flex items-center space-x-3 text-sm font-medium px-3 py-2 rounded-md',
+              "flex items-center space-x-3 text-sm font-medium px-3 py-2 rounded-md",
               location.pathname === item.href
-                ? 'bg-gray-800 text-white'
-                : 'text-gray-400 hover:text-white'
+                ? "bg-gray-800 text-white"
+                : "text-gray-400 hover:text-white"
             )}
             onClick={() => setIsOpen(false)}
           >
@@ -46,12 +46,21 @@ export default function Sidebar() {
       {/* Mobile Sidebar */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden fixed top-4 left-4 z-40">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden fixed top-4 z-40"
+          >
             <Menu className="h-6 w-6 text-white" />
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-60 bg-black p-6">
-          <Button variant="ghost" size="icon" className="absolute right-4 top-4" onClick={() => setIsOpen(false)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-4 top-4"
+            onClick={() => setIsOpen(false)}
+          >
             <X className="h-6 w-6 text-white" />
           </Button>
           <div className="mt-8">
@@ -61,7 +70,7 @@ export default function Sidebar() {
       </Sheet>
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block w-60 bg-black p-6 h-screen">
+      <div className="hidden md:block w-60 bg-black p-6 h-full overflow-y-auto">
         <NavContent />
       </div>
     </>
