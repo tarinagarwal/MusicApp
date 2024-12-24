@@ -20,8 +20,8 @@ export function Header() {
   return (
     <header className="flex items-center justify-between py-4 px-4 sm:px-6 lg:px-8 bg-gray-900 sticky top-0 z-10">
       <div className="flex items-center gap-2 pl-5 text-white">
-        <Music size={24} className=""/>
-        <span className="text-xl font-bold">Spotify Clone</span>
+        <Music size={20} className=""/>
+        <span className="text-lg font-bold">Vidya Music Player Ltd.</span>
       </div>
 
       <div className="relative">

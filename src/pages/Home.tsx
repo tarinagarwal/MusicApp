@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Welcome to Spotify</h1>
+      <h1 className="text-3xl font-bold">Welcome to Vidya Music Player Ltd. </h1>
 
       <div>
         <h2 className="text-2xl font-bold mb-4">Popular Songs</h2>
