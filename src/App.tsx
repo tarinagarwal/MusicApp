@@ -12,6 +12,7 @@ import AuthGuard from "./components/AuthGuard";
 import AdminGuard from "./components/AdminGuard";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AddSong from "./pages/admin/AddSong";
+import SharedSong from "./pages/SharedSong";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/search" element={<Search />} />
+                <Route path="/play/:songId" element={<SharedSong />} />
                 <Route
                   path="/library"
                   element={

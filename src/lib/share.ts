@@ -1,4 +1,4 @@
-import { toast } from './toast';
+import { toast } from "./toast";
 
 interface ShareOptions {
   title: string;
@@ -7,6 +7,9 @@ interface ShareOptions {
 }
 
 export async function shareContent(options: ShareOptions): Promise<boolean> {
+  // Format the URL to ensure it's absolute
+  const url = new URL(options.url);
+
   // First try native sharing
   if (navigator.share) {
     try {
@@ -14,7 +17,7 @@ export async function shareContent(options: ShareOptions): Promise<boolean> {
       return true;
     } catch (err) {
       // If user cancelled sharing, don't fallback to clipboard
-      if ((err as Error).name === 'AbortError') {
+      if ((err as Error).name === "AbortError") {
         return false;
       }
     }
@@ -22,12 +25,12 @@ export async function shareContent(options: ShareOptions): Promise<boolean> {
 
   // Fallback to clipboard
   try {
-    await navigator.clipboard.writeText(options.url);
-    toast.success('Link copied to clipboard!');
+    await navigator.clipboard.writeText(url.toString());
+    toast.success("Link copied to clipboard!");
     return true;
   } catch (err) {
-    console.error('Failed to copy:', err);
-    toast.error('Failed to copy link');
+    console.error("Failed to copy:", err);
+    toast.error("Failed to copy link");
     return false;
   }
 }

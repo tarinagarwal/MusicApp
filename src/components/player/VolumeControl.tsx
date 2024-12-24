@@ -26,7 +26,7 @@ export function VolumeControl({ volume, onVolumeChange }: VolumeControlProps) {
       <div className="flex items-center space-x-2">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" onClick={toggleMute} className="text-gray-400 hover:text-white">
+            <Button variant="ghost" size="icon" onClick={toggleMute} className="text-gray-400 hover:bg-transparent hover:text-gray-400">
               <VolumeIcon />
             </Button>
           </TooltipTrigger>

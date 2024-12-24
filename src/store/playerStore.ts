@@ -1,6 +1,7 @@
-import { create } from 'zustand';
-import { Howl } from 'howler';
-import type { Song } from '../types/database';
+import { create } from "zustand";
+import { Howl } from "howler";
+import type { Song } from "../types/database";
+import { shuffleArray } from "../lib/queue";
 
 interface PlayerStore {
   currentSong: Song | null;
@@ -9,12 +10,15 @@ interface PlayerStore {
   currentTime: number;
   sound: Howl | null;
   queue: Song[];
+  originalQueue: Song[];
+  currentIndex: number;
   shuffle: boolean;
   repeat: boolean;
   setCurrentSong: (song: Song) => void;
-  playSong: (song: Song) => void;
+  playSong: (song: Song, songs?: Song[]) => void;
   pauseSong: () => void;
   resumeSong: () => void;
+  togglePlayPause: () => void;
   setVolume: (volume: number) => void;
   seek: (time: number) => void;
   nextSong: () => void;
@@ -31,6 +35,8 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
   currentTime: 0,
   sound: null,
   queue: [],
+  originalQueue: [],
+  currentIndex: -1,
   shuffle: false,
   repeat: false,
 
@@ -38,10 +44,23 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     set({ currentSong: song });
   },
 
-  playSong: (song) => {
-    const { sound: currentSound } = get();
+  playSong: (song, songs = []) => {
+    const { sound: currentSound, shuffle } = get();
     if (currentSound) {
       currentSound.unload();
+    }
+
+    // If songs array is provided, set up the queue
+    if (songs.length > 0) {
+      const songIndex = songs.findIndex((s) => s.id === song.id);
+      const queueToUse = shuffle ? shuffleArray(songs) : songs;
+      set({
+        originalQueue: songs,
+        queue: queueToUse,
+        currentIndex: shuffle
+          ? queueToUse.findIndex((s) => s.id === song.id)
+          : songIndex,
+      });
     }
 
     const sound = new Howl({
@@ -55,7 +74,6 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
         }
       },
       onplay: () => {
-        // Update current time
         const interval = setInterval(() => {
           if (sound.playing()) {
             set({ currentTime: sound.seek() });
@@ -86,6 +104,15 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     set({ isPlaying: true });
   },
 
+  togglePlayPause: () => {
+    const { isPlaying, pauseSong, resumeSong } = get();
+    if (isPlaying) {
+      pauseSong();
+    } else {
+      resumeSong();
+    }
+  },
+
   setVolume: (volume) => {
     const { sound } = get();
     if (sound) {
@@ -103,15 +130,59 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
   },
 
   nextSong: () => {
-    // Implement next song logic
+    const { queue, currentIndex, repeat } = get();
+    if (queue.length === 0) return;
+
+    let nextIndex = currentIndex + 1;
+    if (nextIndex >= queue.length) {
+      if (repeat) {
+        nextIndex = 0;
+      } else {
+        return;
+      }
+    }
+
+    const nextSong = queue[nextIndex];
+    if (nextSong) {
+      set({ currentIndex: nextIndex });
+      get().playSong(nextSong);
+    }
   },
 
   previousSong: () => {
-    // Implement previous song logic
+    const { queue, currentIndex } = get();
+    if (queue.length === 0) return;
+
+    const prevIndex = currentIndex - 1;
+    if (prevIndex < 0) return;
+
+    const prevSong = queue[prevIndex];
+    if (prevSong) {
+      set({ currentIndex: prevIndex });
+      get().playSong(prevSong);
+    }
   },
 
   toggleShuffle: () => {
-    set((state) => ({ shuffle: !state.shuffle }));
+    const { originalQueue, currentSong, shuffle } = get();
+    const newShuffle = !shuffle;
+
+    if (originalQueue.length > 0) {
+      const newQueue = newShuffle
+        ? shuffleArray(originalQueue)
+        : [...originalQueue];
+      const newIndex = newQueue.findIndex(
+        (song) => song.id === currentSong?.id
+      );
+
+      set({
+        shuffle: newShuffle,
+        queue: newQueue,
+        currentIndex: newIndex >= 0 ? newIndex : 0,
+      });
+    } else {
+      set({ shuffle: newShuffle });
+    }
   },
 
   toggleRepeat: () => {
@@ -119,6 +190,9 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
   },
 
   addToQueue: (song) => {
-    set((state) => ({ queue: [...state.queue, song] }));
+    set((state) => ({
+      queue: [...state.queue, song],
+      originalQueue: [...state.originalQueue, song],
+    }));
   },
 }));

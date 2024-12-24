@@ -1,7 +1,19 @@
-import React from 'react';
-import { Play, Pause, SkipBack, SkipForward, Repeat, Shuffle } from 'lucide-react';
-import { Button } from "../../components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip"
+import React from "react";
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Repeat,
+  Shuffle,
+} from "lucide-react";
+import { Button } from "../../components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../../components/ui/tooltip";
 
 interface ControlsProps {
   isPlaying: boolean;
@@ -33,7 +45,11 @@ export function Controls({
               variant="ghost"
               size="icon"
               onClick={onShuffleToggle}
-              className={shuffle ? 'text-green-500' : 'text-gray-400 hover:text-white'}
+              className={
+                shuffle
+                  ? "text-green-500 hover:bg-transparent hover:text-green-500"
+                  : "text-gray-400 hover:bg-transparent hover:text-gray-400"
+              }
             >
               <Shuffle className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
@@ -42,10 +58,15 @@ export function Controls({
             <p>Shuffle</p>
           </TooltipContent>
         </Tooltip>
-        
+
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" onClick={onPrevious} className="text-gray-400 hover:text-white">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onPrevious}
+              className="text-gray-400 hover:bg-transparent hover:text-gray-400"
+            >
               <SkipBack className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
           </TooltipTrigger>
@@ -53,10 +74,15 @@ export function Controls({
             <p>Previous</p>
           </TooltipContent>
         </Tooltip>
-        
+
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="default" size="icon" onClick={onPlayPause} className="bg-white hover:bg-gray-200 text-black h-10 w-10 sm:h-12 sm:w-12">
+            <Button
+              variant="default"
+              size="icon"
+              onClick={onPlayPause}
+              className="bg-white hover:bg-gray-200 text-black h-10 w-10 sm:h-12 sm:w-12"
+            >
               {isPlaying ? (
                 <Pause className="h-4 w-4 sm:h-5 sm:w-5" />
               ) : (
@@ -65,13 +91,18 @@ export function Controls({
             </Button>
           </TooltipTrigger>
           <TooltipContent className="bg-gray-800 text-white">
-            <p>{isPlaying ? 'Pause' : 'Play'}</p>
+            <p>{isPlaying ? "Pause" : "Play"}</p>
           </TooltipContent>
         </Tooltip>
-        
+
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" onClick={onNext} className="text-gray-400 hover:text-white">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onNext}
+              className="text-gray-400 hover:bg-transparent hover:text-gray-400"
+            >
               <SkipForward className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
           </TooltipTrigger>
@@ -79,14 +110,18 @@ export function Controls({
             <p>Next</p>
           </TooltipContent>
         </Tooltip>
-        
+
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
               onClick={onRepeatToggle}
-              className={repeat ? 'text-green-500' : 'text-gray-400 hover:text-white'}
+              className={
+                repeat
+                  ? "text-green-500 hover:bg-transparent hover:text-green-500"
+                  : "text-gray-400 hover:bg-transparent hover:text-gray-400"
+              }
             >
               <Repeat className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
@@ -99,4 +134,3 @@ export function Controls({
     </TooltipProvider>
   );
 }
-
