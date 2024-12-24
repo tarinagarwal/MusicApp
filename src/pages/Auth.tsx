@@ -66,7 +66,10 @@ export default function Auth() {
     <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-md bg-gray-900/40 border-gray-800 text-white">
         <CardHeader>
-          <CardDescription className="text-center text-white text-lg">
+          <CardTitle className="text-2xl font-bold text-center">
+            Welcome to Audiva
+          </CardTitle>
+          <CardDescription className="text-center text-gray-300">
             Sign in or create an account
           </CardDescription>
         </CardHeader>
